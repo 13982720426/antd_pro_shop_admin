@@ -59,7 +59,7 @@ const request = extend({
   errorHandler,
   // default error handling
   credentials: 'include', // Does the default request bring cookies
-  prefix: '/api',
+  // prefix: '/api',
 });
 
 // 请求拦截器，在请求之前添加Header头
