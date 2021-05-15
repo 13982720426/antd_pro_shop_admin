@@ -1,11 +1,12 @@
 /** Request 网络请求工具 更详细的 api 文档: https://github.com/umijs/umi-request */
 import { extend } from 'umi-request';
-import { notification } from 'antd';
+import { message } from 'antd';
+
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
-  201: '新建或修改数据成功。',
+  201: '新建数据成功。',
   202: '一个请求已经进入后台排队（异步任务）。',
-  204: '删除数据成功。',
+  204: '处理成功。',
   400: '发出的请求有错误，服务器没有进行新建或修改数据的操作。',
   401: '用户没有权限（令牌、用户名、密码错误）。',
   403: '用户得到授权，但是访问是被禁止的。',
@@ -23,21 +24,28 @@ const codeMessage = {
  * @en-US Exception handler
  */
 
-const errorHandler = (error) => {
+const errorHandler = async (error) => {
   const { response } = error;
 
   if (response && response.status) {
-    const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
-    notification.error({
-      message: `Request error ${status}: ${url}`,
-      description: errorText,
-    });
+    let errorText = codeMessage[response.status] || response.statusText;
+    const { status } = response;
+    const result = await response.json();
+    // 处理422未验证通过的情况
+    if (status === 422) {
+      let errs = '';
+      for (const key in result.errors) {
+        errs += result.errors[key][0];
+      }
+      errorText += `[ ${errs} ]`;
+    }
+    // 处理400的情况
+    if (status === 400) {
+      errorText += `[ ${result.message} ]`;
+    }
+    message.error(errorText);
   } else if (!response) {
-    notification.error({
-      description: 'Your network is abnormal and cannot connect to the server',
-      message: 'Network anomaly',
-    });
+    message.error('网络发生异常，无法连接服务器');
   }
 
   return response;
@@ -51,5 +59,21 @@ const request = extend({
   errorHandler,
   // default error handling
   credentials: 'include', // Does the default request bring cookies
+  prefix: '/api',
 });
+
+// 请求拦截器，在请求之前添加Header头
+request.interceptors.request.use((url, options) => {
+  // 获取token
+  const token = 'hello';
+  // 设置Header头
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  return {
+    url,
+    options: { ...options, headers },
+  };
+});
+
 export default request;
