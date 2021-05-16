@@ -2,27 +2,22 @@ import {
   LockOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Alert, Tabs } from 'antd';
-import React, { useState } from 'react';
+import {  Tabs } from 'antd';
+import React,{useEffect} from 'react';
 import ProForm, { ProFormText } from '@ant-design/pro-form';
-import { useIntl, connect, FormattedMessage } from 'umi';
+import { connect,history } from 'umi';
 import styles from './index.less';
 
-const LoginMessage = ({ content }) => (
-  <Alert
-    style={{
-      marginBottom: 24,
-    }}
-    message={content}
-    type="error"
-    showIcon
-  />
-);
 
 const Login = (props) => {
-  const { userLogin = {}, submitting } = props;
-  const { status} = userLogin;
-  const intl = useIntl();
+  useEffect(()=>{
+    // 判断如果已经登录过，直接去首页
+    const userInfo=localStorage.getItem("userInfo")
+    if(userInfo) history.replace('/')
+  },[])
+
+  const {submitting } = props;
+ 
 
   const handleSubmit = (values) => {
     const { dispatch } = props;
@@ -60,15 +55,6 @@ const Login = (props) => {
           />
 
         </Tabs>
-
-        {status === 'error' && !submitting && (
-          <LoginMessage
-            content={intl.formatMessage({
-              id: 'pages.login.accountLogin.errorMessage',
-              defaultMessage: 'Incorrect account or password（admin/ant.design)',
-            })}
-          />
-        )}
             <ProFormText
               name="email"
               fieldProps={{

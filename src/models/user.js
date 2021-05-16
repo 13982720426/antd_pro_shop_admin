@@ -1,4 +1,5 @@
 import { queryCurrent, query as queryUsers } from '@/services/user';
+
 const UserModel = {
   namespace: 'user',
   state: {
@@ -12,34 +13,24 @@ const UserModel = {
         payload: response,
       });
     },
-
+    // 获取用户信息
     *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+      // 查看localstorage是否有用户信息，没有再去请求
+      let userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      if (!userInfo) {
+        userInfo = yield call(queryCurrent);
+        if (userInfo.useCache !== false) localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      }
+
       yield put({
         type: 'saveCurrentUser',
-        payload: response,
+        payload: userInfo,
       });
     },
   },
   reducers: {
     saveCurrentUser(state, action) {
       return { ...state, currentUser: action.payload || {} };
-    },
-
-    changeNotifyCount(
-      state = {
-        currentUser: {},
-      },
-      action,
-    ) {
-      return {
-        ...state,
-        currentUser: {
-          ...state.currentUser,
-          notifyCount: action.payload.totalCount,
-          unreadCount: action.payload.unreadCount,
-        },
-      };
     },
   },
 };
