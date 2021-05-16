@@ -21,7 +21,6 @@ const UserModel = {
         userInfo = yield call(queryCurrent);
         if (userInfo.useCache !== false) localStorage.setItem('userInfo', JSON.stringify(userInfo));
       }
-
       yield put({
         type: 'saveCurrentUser',
         payload: userInfo,

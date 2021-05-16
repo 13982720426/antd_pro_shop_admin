@@ -1,8 +1,6 @@
-import { stringify } from 'querystring';
 import { history } from 'umi';
-import { fakeAccountLogin } from '@/services/login';
-import { setAuthority } from '@/utils/authority';
-import { getPageQuery } from '@/utils/utils';
+import { fakeAccountLogin, logout } from '@/services/login';
+
 import { message } from 'antd';
 
 const Model = {
@@ -10,6 +8,9 @@ const Model = {
   state: {},
   effects: {
     *login({ payload }, { call, put }) {
+      // loading
+      const load = message.loading('登录中...');
+
       const response = yield call(fakeAccountLogin, payload);
       // 判断是否登陆成功
       if (response.status === undefined) {
@@ -22,19 +23,26 @@ const Model = {
         history.replace('/');
         message.success('🎉 🎉 🎉  登录成功！');
       }
+      load();
     },
 
-    logout() {
-      const { redirect } = getPageQuery(); // Note: There may be security issues, please note
+    *logout(_, { call }) {
+      // loading
+      const load = message.loading('退出中...');
 
-      if (window.location.pathname !== '/user/login' && !redirect) {
-        history.replace({
-          pathname: '/user/login',
-          search: stringify({
-            redirect: window.location.href,
-          }),
-        });
+      // 请求Api，退出登录
+      const response = yield call(logout);
+
+      // 判断是否成功退出
+      if (response.status === undefined) {
+        // 删除本地存储的token和userInfo
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('userInfo');
+        // 重定向到登录页
+        history.replace('/login');
+        message.success('🎉 🎉 🎉  退出成功！');
       }
+      load();
     },
   },
   reducers: {
