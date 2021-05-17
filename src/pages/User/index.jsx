@@ -1,51 +1,14 @@
 import React,{useRef} from 'react';
 import {PageContainer} from "@ant-design/pro-layout"
 import ProTable from '@ant-design/pro-table';
-import { Button,Avatar,Switch } from 'antd';
+import { Button,Avatar,Switch, message } from 'antd';
 import { PlusOutlined, UserOutlined } from '@ant-design/icons';
-import {getUsers} from "@/services/user"
+import {getUsers,lockUser} from "@/services/user"
 
 const index = () => {
 
 
     const actionRef= useRef()
-
-    const columns=[
-        {
-            title:"头像",
-            dataIndex:"avatar_url",
-            hideInSearch:true,
-            render:(_,record)=> <Avatar src={record} size={32} icon={<UserOutlined />} />
-        },
-        {
-            title:"姓名",
-            dataIndex:"name",
-        },
-        {
-            title:"邮箱",
-            dataIndex:"email",
-        },
-        {
-            title:"是否禁用",
-            dataIndex:"is_locked",
-            hideInSearch:true,
-            render:(_,record)=> <Switch 
-                checkedChildren="启用" 
-                unCheckedChildren="禁用" 
-                defaultChecked={record.is_locked === 0}
-                onChange={()=>{}}
-            />
-        },
-        {
-            title:"创建时间",
-            dataIndex:"created_at",
-            hideInSearch:true,
-        },
-        {
-            title:"操作",
-            render:(_,record)=> <a onChange={()=>{}}>编辑</a>
-        },
-    ]
 
     // 获取用户列表数据
     const getData = async (params)=>{
@@ -60,6 +23,52 @@ const index = () => {
       };
 
     }
+    // 禁启用
+    const heandleLockUser= async (uid)=>{
+      const response = await lockUser(uid)
+      if(response.status===undefined){
+        message.success('操作成功！')
+      }else{
+        message.error("操作失败！")
+      }
+    }
+
+    const columns=[
+      {
+          title:"头像",
+          dataIndex:"avatar_url",
+          hideInSearch:true,
+          render:(_,record)=> <Avatar src={record} size={32} icon={<UserOutlined />} />
+      },
+      {
+          title:"姓名",
+          dataIndex:"name",
+      },
+      {
+          title:"邮箱",
+          dataIndex:"email",
+      },
+      {
+          title:"是否禁用",
+          dataIndex:"is_locked",
+          hideInSearch:true,
+          render:(_,record)=> <Switch 
+              checkedChildren="启用" 
+              unCheckedChildren="禁用" 
+              defaultChecked={record.is_locked === 0}
+              onChange={()=>{heandleLockUser(record.id)}}
+          />
+      },
+      {
+          title:"创建时间",
+          dataIndex:"created_at",
+          hideInSearch:true,
+      },
+      {
+          title:"操作",
+          render:(_,record)=> <a onChange={()=>{}}>编辑</a>
+      },
+  ]
 
     return (
         <PageContainer>
