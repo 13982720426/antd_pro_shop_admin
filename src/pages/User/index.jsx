@@ -1,12 +1,15 @@
-import React,{useRef} from 'react';
+import React,{useRef,useState} from 'react';
 import {PageContainer} from "@ant-design/pro-layout"
 import ProTable from '@ant-design/pro-table';
-import { Button,Avatar,Switch, message } from 'antd';
+import { Button,Avatar,Switch, message,Modal } from 'antd';
 import { PlusOutlined, UserOutlined } from '@ant-design/icons';
-import {getUsers,lockUser} from "@/services/user"
+  import {getUsers,lockUser} from "@/services/user"
+  import ProForm, { ProFormText } from '@ant-design/pro-form';
+
 
 const index = () => {
 
+    const [isModalVisible, setisModalVisible] = useState(false)
 
     const actionRef= useRef()
 
@@ -23,6 +26,7 @@ const index = () => {
       };
 
     }
+
     // 禁启用
     const heandleLockUser= async (uid)=>{
       const response = await lockUser(uid)
@@ -32,6 +36,16 @@ const index = () => {
         message.error("操作失败！")
       }
     }
+
+    // 关闭模态框
+    const closeModal=()=>{
+      setisModalVisible(false)
+    }
+    // 打开添加表单
+    const openCreateForm=()=>{
+      setisModalVisible(true)
+    }
+
 
     const columns=[
       {
@@ -88,12 +102,52 @@ const index = () => {
               dateFormatter="string"
               headerTitle="用户列表"
               toolBarRender={() => [
-                <Button key="button" icon={<PlusOutlined />} type="primary">
+                <Button key="button" icon={<PlusOutlined />} type="primary" onClick={()=>openCreateForm()}>
                   新建
                 </Button>,
-
               ]}
             />
+          <Modal title="添加用户" 
+            visible={isModalVisible} 
+            onCancel={closeModal}
+            footer={null}
+            >
+              <ProForm
+                onFinish={ (values) => {
+    
+                  message.success('提交成功');
+                }}
+   
+              >
+                <ProFormText
+                  name="name"
+                  label="昵称"
+                  placeholder="请输入昵称"
+                  rules={[
+                    {required:true,message:'请输入昵称'}
+                  ]}
+                />
+                <ProFormText
+                  name="email"
+                  label="邮箱"
+                  placeholder="请输入邮箱"
+                  rules={[
+                    {required:true,message:'请输入邮箱'},
+                    {type:"email",message:'邮箱格式不正确'},
+                  ]}
+                />
+                <ProFormText.Password
+                  name="password"
+                  label="密码"
+                  placeholder="请输入密码"
+                  rules={[
+                    {required:true,message:'请输入密码'},
+                    {min:6,message:'密码最小6位'},
+                  ]}
+                />
+              </ProForm>
+          </Modal>
+
         </PageContainer>
     );
 };
