@@ -27,3 +27,11 @@ export async function lockUser(uid) {
 export async function addUser(params) {
   return request.post('/admin/users', { params });
 }
+/**
+ * 更新用户
+ * @param {*} params
+ * @returns
+ */
+export async function updateUser(editId, params) {
+  return request.put(`/admin/users/${editId}`, { params });
+}

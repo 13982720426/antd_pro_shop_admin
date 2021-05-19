@@ -5,9 +5,12 @@ import { Button, Avatar, Switch, message } from 'antd';
 import { PlusOutlined, UserOutlined } from '@ant-design/icons';
 import { getUsers, lockUser } from '@/services/user';
 import Create from './components/Create';
+import Edit from './components/Edit';
 
 const index = () => {
   const [isModalVisible, setisModalVisible] = useState(false);
+  const [isModalVisibleEdit, setisModalVisibleEdit] = useState(false);
+  const [editId, setEditId] = useState(undefined);
 
   // 表格的ref，便于操作自定义操作表格
   const actionRef = useRef();
@@ -36,6 +39,12 @@ const index = () => {
   // 控制新建用户模态框显示和隐藏
   const isShowModal = (show) => {
     setisModalVisible(show);
+  };
+
+  // 控制编辑用户模态框显示和隐藏
+  const isShowModalEdit = (show, id) => {
+    setisModalVisibleEdit(show);
+    setEditId(id);
   };
 
   const columns = [
@@ -75,7 +84,7 @@ const index = () => {
     },
     {
       title: '操作',
-      render: (_, record) => <a onChange={() => {}}>编辑</a>,
+      render: (_, record) => <a onClick={() => isShowModalEdit(true, record.id)}>编辑</a>,
     },
   ];
 
@@ -106,6 +115,12 @@ const index = () => {
         ]}
       />
       <Create isModalVisible={isModalVisible} isShowModal={isShowModal} actionRef={actionRef} />
+      <Edit
+        isModalVisible={isModalVisibleEdit}
+        isShowModal={isShowModalEdit}
+        actionRef={actionRef}
+        editId={editId}
+      />
     </PageContainer>
   );
 };
