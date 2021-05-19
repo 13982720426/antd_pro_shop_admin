@@ -115,12 +115,17 @@ const index = () => {
         ]}
       />
       <Create isModalVisible={isModalVisible} isShowModal={isShowModal} actionRef={actionRef} />
-      <Edit
-        isModalVisible={isModalVisibleEdit}
-        isShowModal={isShowModalEdit}
-        actionRef={actionRef}
-        editId={editId}
-      />
+
+      {!isModalVisibleEdit ? (
+        ''
+      ) : (
+        <Edit
+          isModalVisible={isModalVisibleEdit}
+          isShowModal={isShowModalEdit}
+          actionRef={actionRef}
+          editId={editId}
+        />
+      )}
     </PageContainer>
   );
 };

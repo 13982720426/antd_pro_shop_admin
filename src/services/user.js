@@ -35,3 +35,11 @@ export async function addUser(params) {
 export async function updateUser(editId, params) {
   return request.put(`/admin/users/${editId}`, { params });
 }
+/**
+ * 用户详情
+ * @param {*} editId
+ * @returns
+ */
+export async function showUser(editId) {
+  return request(`/admin/users/${editId}`);
+}

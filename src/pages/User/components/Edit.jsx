@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ProForm, { ProFormText } from '@ant-design/pro-form';
-import { Modal, message } from 'antd';
-import { updateUser } from '@/services/user';
+import { Modal, message, Skeleton } from 'antd';
+import { showUser, updateUser } from '@/services/user';
 
 const Create = (props) => {
   const { isModalVisible, isShowModal, actionRef, editId } = props;
+  const [initialValues, setinitialValues] = useState(undefined);
 
-  console.log(editId);
+  useEffect(async () => {
+    // 发送请求，获取用户详情
+    if (editId !== undefined) {
+      const response = await showUser(editId);
+      setinitialValues({
+        name: response.name,
+        email: response.email,
+      });
+    }
+  }, []);
 
   /**
    * 添加用户
@@ -32,36 +42,32 @@ const Create = (props) => {
       footer={null}
       destroyOnClose={true}
     >
-      <ProForm
-        onFinish={(values) => {
-          createUser(values);
-        }}
-      >
-        <ProFormText
-          name="name"
-          label="昵称"
-          placeholder="请输入昵称"
-          rules={[{ required: true, message: '请输入昵称' }]}
-        />
-        <ProFormText
-          name="email"
-          label="邮箱"
-          placeholder="请输入邮箱"
-          rules={[
-            { required: true, message: '请输入邮箱' },
-            { type: 'email', message: '邮箱格式不正确' },
-          ]}
-        />
-        <ProFormText.Password
-          name="password"
-          label="密码"
-          placeholder="请输入密码"
-          rules={[
-            { required: true, message: '请输入密码' },
-            { min: 6, message: '密码最小6位' },
-          ]}
-        />
-      </ProForm>
+      {initialValues === undefined ? (
+        <Skeleton active={true} paragraph={{ rows: 4 }} />
+      ) : (
+        <ProForm
+          initialValues={initialValues}
+          onFinish={(values) => {
+            editUser(values);
+          }}
+        >
+          <ProFormText
+            name="name"
+            label="昵称"
+            placeholder="请输入昵称"
+            rules={[{ required: true, message: '请输入昵称' }]}
+          />
+          <ProFormText
+            name="email"
+            label="邮箱"
+            placeholder="请输入邮箱"
+            rules={[
+              { required: true, message: '请输入邮箱' },
+              { type: 'email', message: '邮箱格式不正确' },
+            ]}
+          />
+        </ProForm>
+      )}
     </Modal>
   );
 };
