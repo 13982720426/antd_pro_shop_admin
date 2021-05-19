@@ -18,3 +18,12 @@ export async function getUsers(params) {
 export async function lockUser(uid) {
   return request.patch(`/admin/users/${uid}/lock`);
 }
+
+/**
+ * 添加用户
+ * @param {*} params
+ * @returns
+ */
+export async function addUser(params) {
+  return request.post('/admin/users', { params });
+}
