@@ -3,7 +3,7 @@ import ProForm, { ProFormText } from '@ant-design/pro-form';
 import { Modal, message, Skeleton } from 'antd';
 import { showUser, updateUser } from '@/services/user';
 
-const Create = (props) => {
+const Edit = (props) => {
   const { isModalVisible, isShowModal, actionRef, editId } = props;
   const [initialValues, setinitialValues] = useState(undefined);
 
@@ -72,4 +72,4 @@ const Create = (props) => {
   );
 };
 
-export default Create;
+export default Edit;
