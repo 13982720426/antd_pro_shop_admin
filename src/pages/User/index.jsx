@@ -77,6 +77,7 @@ const index = () => {
     },
     {
       title: '操作',
+      hideInSearch: true,
       render: (_, record) => <a onClick={() => isShowModal(true, record.id)}>编辑</a>,
     },
   ];
