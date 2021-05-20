@@ -3,7 +3,7 @@ import { PageContainer } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
 import { Button, Image, Switch, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { getGoods } from '@/services/goods';
+import { getGoods, isOn, isRecommend } from '@/services/goods';
 import CreateOrEdit from './components/CreateOrEdit';
 
 const index = () => {
@@ -27,9 +27,16 @@ const index = () => {
     };
   };
 
-  // 禁启用
-  const heandleLockUser = async (uid) => {
-    const response = await lockUser(uid);
+  // 是否上架商品
+  const heandleIsOn = async (goodsId) => {
+    const response = await isOn(goodsId);
+    if (response.status === undefined) {
+      message.success('操作成功！');
+    }
+  };
+  // 是否推荐商品
+  const heandleIsRecommend = async (goodsId) => {
+    const response = await isRecommend(goodsId);
     if (response.status === undefined) {
       message.success('操作成功！');
     }
@@ -83,7 +90,7 @@ const index = () => {
           unCheckedChildren="未上架"
           defaultChecked={record.is_on === 1}
           onChange={() => {
-            heandleLockUser(record.id);
+            heandleIsOn(record.id);
           }}
         />
       ),
@@ -102,7 +109,7 @@ const index = () => {
           unCheckedChildren="未推荐"
           defaultChecked={record.is_recommend === 1}
           onChange={() => {
-            heandleLockUser(record.id);
+            heandleIsRecommend(record.id);
           }}
         />
       ),

@@ -5,14 +5,22 @@ export async function getGoods(params) {
   return request('/admin/goods', { params });
 }
 
-// /**
-//  * 禁用和启用
-//  * @param {用户id} uid
-//  * @returns
-//  */
-// export async function lockUser(uid) {
-//   return request.patch(`/admin/users/${uid}/lock`);
-// }
+/**
+ * 上架和下架商品
+ * @param {商品id} goodsid
+ * @returns
+ */
+export async function isOn(goodsId) {
+  return request.patch(`/admin/goods/${goodsId}/on`);
+}
+/**
+ * 推荐和不推荐商品
+ * @param {商品id} goodsid
+ * @returns
+ */
+export async function isRecommend(goodsId) {
+  return request.patch(`/admin/goods/${goodsId}/recommend`);
+}
 
 // /**
 //  * 添加用户
