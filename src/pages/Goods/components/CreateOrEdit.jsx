@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import ProForm, { ProFormText } from '@ant-design/pro-form';
+import ProForm, {
+  ProFormText,
+  ProFormTextArea,
+  ProFormDigit,
+  ProFormUploadButton,
+} from '@ant-design/pro-form';
 import { Modal, message, Skeleton } from 'antd';
 import { showUser, updateUser, addUser } from '@/services/user';
 
@@ -53,7 +58,7 @@ const CreateOrEdit = (props) => {
 
   return (
     <Modal
-      title={`${type}用户`}
+      title={`${type}商品`}
       visible={isModalVisible}
       onCancel={() => isShowModal(false)}
       footer={null}
@@ -71,36 +76,51 @@ const CreateOrEdit = (props) => {
             }}
           >
             <ProFormText
-              name="name"
-              label="昵称"
-              placeholder="请输入昵称"
-              rules={[{ required: true, message: '请输入昵称' }]}
+              name="category_id"
+              label="分类"
+              placeholder="请输入分类"
+              rules={[{ required: true, message: '请输入分类' }]}
             />
             <ProFormText
-              name="email"
-              label="邮箱"
-              placeholder="请输入邮箱"
-              rules={[
-                { required: true, message: '请输入邮箱' },
-                { type: 'email', message: '邮箱格式不正确' },
-              ]}
+              name="title"
+              label="商品名"
+              placeholder="请输入商品名"
+              rules={[{ required: true, message: '请输入商品名' }]}
             />
-            {
-              // 只有添加用户才有密码框
-              editId !== undefined ? (
-                ''
-              ) : (
-                <ProFormText.Password
-                  name="password"
-                  label="密码"
-                  placeholder="请输入密码"
-                  rules={[
-                    { required: true, message: '请输入密码' },
-                    { min: 6, message: '密码最小6位' },
-                  ]}
-                />
-              )
-            }
+            <ProFormTextArea
+              name="description"
+              label="描述"
+              placeholder="请输入商品描述"
+              rules={[{ required: true, message: '请输入商品描述' }]}
+            />
+            <ProFormDigit
+              name="price"
+              label="价格"
+              placeholder="请输入商品价格"
+              min={0}
+              max={99999999}
+              rules={[{ required: true, message: '请输入商商品价格' }]}
+            />
+            <ProFormDigit
+              name="stock"
+              label="库存"
+              placeholder="请输入商品库存"
+              min={0}
+              max={99999999}
+              rules={[{ required: true, message: '请输入商品库存' }]}
+            />
+            <ProFormUploadButton
+              label="上传封面图"
+              name="cover"
+              action="upload.do"
+              rules={[{ required: true, message: '请选择商品主图' }]}
+            />
+            <ProFormTextArea
+              name="details"
+              label="详情"
+              placeholder="请输入商品详情"
+              rules={[{ required: true, message: '请输入商品详情' }]}
+            />
           </ProForm>
         )
       }

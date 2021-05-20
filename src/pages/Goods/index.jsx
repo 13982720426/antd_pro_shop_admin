@@ -145,7 +145,7 @@ const index = () => {
           pageSize: 10,
         }}
         dateFormatter="string"
-        headerTitle="用户列表"
+        headerTitle="商品列表"
         toolBarRender={() => [
           <Button
             key="button"
