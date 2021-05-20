@@ -4,12 +4,10 @@ import ProTable from '@ant-design/pro-table';
 import { Button, Avatar, Switch, message } from 'antd';
 import { PlusOutlined, UserOutlined } from '@ant-design/icons';
 import { getUsers, lockUser } from '@/services/user';
-import Create from './components/Create';
-import Edit from './components/Edit';
+import CreateOrEdit from './components/CreateOrEdit';
 
 const index = () => {
   const [isModalVisible, setisModalVisible] = useState(false);
-  const [isModalVisibleEdit, setisModalVisibleEdit] = useState(false);
   const [editId, setEditId] = useState(undefined);
 
   // 表格的ref，便于操作自定义操作表格
@@ -36,15 +34,10 @@ const index = () => {
     }
   };
 
-  // 控制新建用户模态框显示和隐藏
-  const isShowModal = (show) => {
-    setisModalVisible(show);
-  };
-
-  // 控制编辑用户模态框显示和隐藏
-  const isShowModalEdit = (show, id) => {
-    setisModalVisibleEdit(show);
+  // 控制新建/添加用户模态框显示和隐藏
+  const isShowModal = (show, id = undefined) => {
     setEditId(id);
+    setisModalVisible(show);
   };
 
   const columns = [
@@ -84,7 +77,7 @@ const index = () => {
     },
     {
       title: '操作',
-      render: (_, record) => <a onClick={() => isShowModalEdit(true, record.id)}>编辑</a>,
+      render: (_, record) => <a onClick={() => isShowModal(true, record.id)}>编辑</a>,
     },
   ];
 
@@ -114,18 +107,20 @@ const index = () => {
           </Button>,
         ]}
       />
-      <Create isModalVisible={isModalVisible} isShowModal={isShowModal} actionRef={actionRef} />
 
-      {!isModalVisibleEdit ? (
-        ''
-      ) : (
-        <Edit
-          isModalVisible={isModalVisibleEdit}
-          isShowModal={isShowModalEdit}
-          actionRef={actionRef}
-          editId={editId}
-        />
-      )}
+      {
+        // 模态框隐藏的时候，不挂载组件，显示的时候挂载组件，这是为了触发子组件的生命周期
+        !isModalVisible ? (
+          ''
+        ) : (
+          <CreateOrEdit
+            isModalVisible={isModalVisible}
+            isShowModal={isShowModal}
+            actionRef={actionRef}
+            editId={editId}
+          />
+        )
+      }
     </PageContainer>
   );
 };
