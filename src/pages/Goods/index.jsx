@@ -3,7 +3,7 @@ import { PageContainer } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
 import { Button, Avatar, Switch, message } from 'antd';
 import { PlusOutlined, UserOutlined } from '@ant-design/icons';
-import { getUsers, lockUser } from '@/services/user';
+import { getGoods } from '@/services/goods';
 import CreateOrEdit from './components/CreateOrEdit';
 
 const index = () => {
@@ -13,9 +13,10 @@ const index = () => {
   // 表格的ref，便于操作自定义操作表格
   const actionRef = useRef();
 
-  // 获取用户列表数据
+  // 获取商品列表数据
   const getData = async (params) => {
-    const response = await getUsers(params);
+    const response = await getGoods(params);
+
     return {
       data: response.data,
       // success 请返回 true，
@@ -42,10 +43,10 @@ const index = () => {
 
   const columns = [
     {
-      title: '头像',
-      dataIndex: 'avatar_url',
+      title: '商品图',
+      dataIndex: 'cover_url',
       hideInSearch: true,
-      render: (_, record) => <Avatar src={record.avatar_url} size={32} icon={<UserOutlined />} />,
+      render: (_, record) => <Avatar src={record} size={32} icon={<UserOutlined />} />,
     },
     {
       title: '姓名',
