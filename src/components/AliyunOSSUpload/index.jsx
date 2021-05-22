@@ -16,7 +16,6 @@ export default class AliyunOSSUpload extends React.Component {
   init = async () => {
     try {
       const OSSData = await ossConfig();
-      console.log('Aliyun OSS:', OSSData);
 
       this.setState({
         OSSData,
@@ -26,6 +25,7 @@ export default class AliyunOSSUpload extends React.Component {
     }
   };
 
+  // 文件上传过程中触发的回调函数，直到上传完成
   onChange = ({ fileList }) => {
     const { onChange } = this.props;
     console.log('Aliyun OSS:', fileList);
@@ -34,27 +34,19 @@ export default class AliyunOSSUpload extends React.Component {
     }
   };
 
-  onRemove = (file) => {
-    const { value, onChange } = this.props;
-
-    const files = value.filter((v) => v.url !== file.url);
-
-    if (onChange) {
-      onChange(files);
-    }
-  };
-
+  // 额外的上传参数
   getExtraData = (file) => {
     const { OSSData } = this.state;
 
     return {
       key: file.url,
-      OSSAccessKeyId: OSSData.accessId,
+      OSSAccessKeyId: OSSData.accessid, // 注意查看后端返回的字段是否和官方的OSSData一致
       policy: OSSData.policy,
       Signature: OSSData.signature,
     };
   };
 
+  // 选择文件之后，上传文件之前，执行的回调
   beforeUpload = async (file) => {
     const { OSSData } = this.state;
     const expire = OSSData.expire * 1000;
@@ -77,9 +69,11 @@ export default class AliyunOSSUpload extends React.Component {
       fileList: value,
       action: this.state.OSSData.host,
       onChange: this.onChange,
-      onRemove: this.onRemove,
+      // onRemove: this.onRemove,
       data: this.getExtraData,
       beforeUpload: this.beforeUpload,
+      listType: 'picture',
+      maxCount: 1,
     };
     return (
       <Upload {...props}>

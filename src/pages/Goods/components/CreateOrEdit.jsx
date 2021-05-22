@@ -8,6 +8,7 @@ import ProForm, {
 import { Modal, message, Skeleton, Cascader } from 'antd';
 import { showUser, updateUser, addUser } from '@/services/user';
 import { getCategory } from '@/services/category';
+import AliyunOSSUpload from '@/components/AliyunOSSUpload';
 
 const CreateOrEdit = (props) => {
   /**
@@ -126,6 +127,8 @@ const CreateOrEdit = (props) => {
               action="upload.do"
               rules={[{ required: true, message: '请选择商品主图' }]}
             />
+
+            <AliyunOSSUpload />
             <ProFormTextArea
               name="details"
               label="详情"
