@@ -5,8 +5,9 @@ import ProForm, {
   ProFormDigit,
   ProFormUploadButton,
 } from '@ant-design/pro-form';
-import { Modal, message, Skeleton } from 'antd';
+import { Modal, message, Skeleton, Cascader } from 'antd';
 import { showUser, updateUser, addUser } from '@/services/user';
+import { getCategory } from '@/services/category';
 
 const CreateOrEdit = (props) => {
   /**
@@ -19,11 +20,16 @@ const CreateOrEdit = (props) => {
 
   // 将表单初始化的值设置成状态，在编辑的时候使用这个状态
   const [initialValues, setinitialValues] = useState(undefined);
+  const [options, setOptions] = useState([]);
 
   // 添加或者编辑的描述
   const type = editId === undefined ? '添加' : '编辑';
 
   useEffect(async () => {
+    // 查询分类数据
+    const resCategory = await getCategory();
+    if (resCategory.status === undefined) setOptions(resCategory);
+
     // 发送请求，获取用户详情
     if (editId !== undefined) {
       const response = await showUser(editId);
@@ -75,12 +81,17 @@ const CreateOrEdit = (props) => {
               handleSubmit(values);
             }}
           >
-            <ProFormText
+            <ProForm.Item
               name="category_id"
               label="分类"
-              placeholder="请输入分类"
               rules={[{ required: true, message: '请输入分类' }]}
-            />
+            >
+              <Cascader
+                fieldNames={{ label: 'name', value: 'id' }}
+                options={options}
+                placeholder="请输入分类"
+              />
+            </ProForm.Item>
             <ProFormText
               name="title"
               label="商品名"
