@@ -128,10 +128,9 @@ const CreateOrEdit = (props) => {
               label="上传商品主图"
               rules={[{ required: true, message: '请选择商品主图' }]}
             >
-              <AliyunOSSUpload>
-                <Button icon={<UploadOutlined />}>点击上传商品主图</Button>
-              </AliyunOSSUpload>
+              <AliyunOSSUpload>点击上传商品主图</AliyunOSSUpload>
             </ProForm.Item>
+
             <ProFormTextArea
               name="details"
               label="详情"

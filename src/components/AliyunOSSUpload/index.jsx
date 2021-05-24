@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Upload, message, Button } from 'antd';
+import { Upload, message, Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { ossConfig } from '@/services/commom';
 
@@ -51,15 +51,17 @@ export default class AliyunOSSUpload extends React.Component {
     const { OSSData } = this.state;
     const expire = OSSData.expire * 1000;
 
+    // 如果签名过期了就重新获取
     if (expire < Date.now()) {
       await this.init();
     }
-    const dir = 'react/';
+
+    const dir = 'react/'; // 定义上传的目录
 
     const suffix = file.name.slice(file.name.lastIndexOf('.'));
     const filename = OSSData.dir + dir + Date.now() + suffix;
-    file.key = OSSData.dir + dir + filename;
-    file.url = OSSData.host + OSSData.dir + dir + filename;
+    file.key = OSSData.dir + dir + filename; // 在getExtraData 函数中会用到，在云存储的文件的 key
+    file.url = OSSData.host + OSSData.dir + dir + filename; // 上传完成后，用于显示内容
 
     return file;
   };
@@ -80,8 +82,9 @@ export default class AliyunOSSUpload extends React.Component {
 
     return (
       <Upload {...props}>
-        {console.log(this.props.children)}
-        {this.props.children}
+        {/* 将Button标签放在在AliyunOSSUpload组件里写，这里直接使用{this.props.children}，会报错 */}
+        {/* 这里的解决方案是，Button标签封装在AliyunOSSUpload组件内部，其他函数使用AliyunOSSUpload组件时，只需要将AliyunOSSUpload写成双标签，里边写显示的文字 */}
+        <Button icon={<UploadOutlined />}>{this.props.children}</Button>
       </Upload>
     );
   }
