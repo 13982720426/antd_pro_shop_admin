@@ -39,7 +39,7 @@ export default class AliyunOSSUpload extends React.Component {
     const { OSSData } = this.state;
 
     return {
-      key: file.url,
+      key: file.key,
       OSSAccessKeyId: OSSData.accessid, // 注意查看后端返回的字段是否和官方的OSSData一致
       policy: OSSData.policy,
       Signature: OSSData.signature,
@@ -54,10 +54,12 @@ export default class AliyunOSSUpload extends React.Component {
     if (expire < Date.now()) {
       await this.init();
     }
+    const dir = 'react/';
 
     const suffix = file.name.slice(file.name.lastIndexOf('.'));
-    const filename = Date.now() + suffix;
-    file.url = OSSData.dir + filename;
+    const filename = OSSData.dir + dir + Date.now() + suffix;
+    file.key = OSSData.dir + dir + filename;
+    file.url = OSSData.host + OSSData.dir + dir + filename;
 
     return file;
   };
@@ -75,9 +77,11 @@ export default class AliyunOSSUpload extends React.Component {
       listType: 'picture',
       maxCount: 1,
     };
+
     return (
       <Upload {...props}>
-        <Button icon={<UploadOutlined />}>Click to Upload</Button>
+        {console.log(this.props.children)}
+        {this.props.children}
       </Upload>
     );
   }

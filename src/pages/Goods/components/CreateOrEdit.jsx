@@ -4,8 +4,9 @@ import ProForm, {
   ProFormTextArea,
   ProFormDigit,
   ProFormUploadButton,
+  UploadOutlined,
 } from '@ant-design/pro-form';
-import { Modal, message, Skeleton, Cascader } from 'antd';
+import { Modal, message, Skeleton, Cascader, Button } from 'antd';
 import { showUser, updateUser, addUser } from '@/services/user';
 import { getCategory } from '@/services/category';
 import AliyunOSSUpload from '@/components/AliyunOSSUpload';
@@ -121,14 +122,16 @@ const CreateOrEdit = (props) => {
               max={99999999}
               rules={[{ required: true, message: '请输入商品库存' }]}
             />
-            <ProFormUploadButton
-              label="上传封面图"
-              name="cover"
-              action="upload.do"
-              rules={[{ required: true, message: '请选择商品主图' }]}
-            />
 
-            <AliyunOSSUpload />
+            <ProForm.Item
+              name="cover"
+              label="上传商品主图"
+              rules={[{ required: true, message: '请选择商品主图' }]}
+            >
+              <AliyunOSSUpload>
+                <Button icon={<UploadOutlined />}>点击上传商品主图</Button>
+              </AliyunOSSUpload>
+            </ProForm.Item>
             <ProFormTextArea
               name="details"
               label="详情"
