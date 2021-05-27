@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import ProForm, {
-  ProFormText,
-  ProFormTextArea,
-  ProFormDigit,
-  ProFormUploadButton,
-  UploadOutlined,
-} from '@ant-design/pro-form';
-import { Modal, message, Skeleton, Cascader, Button } from 'antd';
+import ProForm, { ProFormText, ProFormTextArea, ProFormDigit } from '@ant-design/pro-form';
+import { Modal, message, Skeleton, Cascader } from 'antd';
 import { showUser, updateUser, addUser } from '@/services/user';
 import { getCategory } from '@/services/category';
 import AliyunOSSUpload from '@/components/AliyunOSSUpload';
+import Editor from '@/components/Editor';
 
 const CreateOrEdit = (props) => {
   /**
@@ -142,12 +137,16 @@ const CreateOrEdit = (props) => {
               </div>
             </ProForm.Item>
 
-            <ProFormTextArea
+            <ProForm.Item
               name="details"
-              label="详情"
+              label="商品详情"
               placeholder="请输入商品详情"
               rules={[{ required: true, message: '请输入商品详情' }]}
-            />
+            >
+              <div>
+                <Editor />
+              </div>
+            </ProForm.Item>
           </ProForm>
         )
       }
