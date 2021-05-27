@@ -8,6 +8,7 @@ export default class AliyunOSSUpload extends React.Component {
     OSSData: {},
   };
 
+  // 组件挂载完成后，进行初始化获取oss配置
   async componentDidMount() {
     await this.init();
   }
@@ -26,12 +27,8 @@ export default class AliyunOSSUpload extends React.Component {
   };
 
   // 文件上传过程中触发的回调函数，直到上传完成
-  onChange = ({ fileList }) => {
-    const { onChange } = this.props;
-    console.log('Aliyun OSS:', fileList);
-    if (onChange) {
-      onChange([...fileList]);
-    }
+  onChange = ({ file }) => {
+    if (file.status === 'done') message.success('上传成功');
   };
 
   // 额外的上传参数
