@@ -28,7 +28,11 @@ export default class AliyunOSSUpload extends React.Component {
 
   // 文件上传过程中触发的回调函数，直到上传完成
   onChange = ({ file }) => {
-    if (file.status === 'done') message.success('上传成功');
+    if (file.status === 'done') {
+      // 上传成功之后，把文件的key，设置成表单某个字段的值
+      this.props.setCoverKey(file.key);
+      message.success('上传成功');
+    }
   };
 
   // 额外的上传参数
@@ -64,8 +68,9 @@ export default class AliyunOSSUpload extends React.Component {
   };
 
   render() {
-    const { value } = this.props;
+    const { value, accept } = this.props;
     const props = {
+      accept: accept || '',
       name: 'file',
       fileList: value,
       action: this.state.OSSData.host,

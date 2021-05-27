@@ -24,6 +24,12 @@ const CreateOrEdit = (props) => {
   const [initialValues, setinitialValues] = useState(undefined);
   const [options, setOptions] = useState([]);
 
+  // 定义Form实例，用来操作表单
+  const [formObj] = ProForm.useForm();
+
+  // 文件上传成功后，设置cover字段的value
+  const setCoverKey = (fileKey) => formObj.setFieldsValue({ cover: fileKey });
+
   // 添加或者编辑的描述
   const type = editId === undefined ? '添加' : '编辑';
 
@@ -78,6 +84,7 @@ const CreateOrEdit = (props) => {
           <Skeleton active={true} paragraph={{ rows: 4 }} />
         ) : (
           <ProForm
+            form={formObj}
             initialValues={initialValues}
             onFinish={(values) => {
               handleSubmit(values);
@@ -128,7 +135,11 @@ const CreateOrEdit = (props) => {
               label="上传商品主图"
               rules={[{ required: true, message: '请选择商品主图' }]}
             >
-              <AliyunOSSUpload>点击上传商品主图</AliyunOSSUpload>
+              <div>
+                <AliyunOSSUpload setCoverKey={setCoverKey} accept="image/*">
+                  点击上传商品主图
+                </AliyunOSSUpload>
+              </div>
             </ProForm.Item>
 
             <ProFormTextArea
