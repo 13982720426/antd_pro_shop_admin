@@ -25,6 +25,9 @@ const CreateOrEdit = (props) => {
   // 文件上传成功后，设置cover字段的value
   const setCoverKey = (fileKey) => formObj.setFieldsValue({ cover: fileKey });
 
+  // 文件上传成功后，设置details字段的value
+  const setDetails = (content) => formObj.setFieldsValue({ details: content });
+
   // 添加或者编辑的描述
   const type = editId === undefined ? '添加' : '编辑';
 
@@ -140,12 +143,9 @@ const CreateOrEdit = (props) => {
             <ProForm.Item
               name="details"
               label="商品详情"
-              placeholder="请输入商品详情"
               rules={[{ required: true, message: '请输入商品详情' }]}
             >
-              <div>
-                <Editor />
-              </div>
+              <Editor setDetails={setDetails} />
             </ProForm.Item>
           </ProForm>
         )
