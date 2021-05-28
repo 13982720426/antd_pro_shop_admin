@@ -86,7 +86,9 @@ export default class AliyunOSSUpload extends React.Component {
       <Upload {...props}>
         {/* 将Button标签放在在AliyunOSSUpload组件里写，这里直接使用{this.props.children}，会报错 */}
         {/* 这里的解决方案是，Button标签封装在AliyunOSSUpload组件内部，其他函数使用AliyunOSSUpload组件时，只需要将AliyunOSSUpload写成双标签，里边写显示的文字 */}
-        <Button icon={<UploadOutlined />}>{this.props.children}</Button>
+        {/* <Button icon={<UploadOutlined />}>{this.props.children}</Button> */}
+        {/* 修复直接使用{this.props.children}，会报错的bug */}
+        {this.props.children}
       </Upload>
     );
   }

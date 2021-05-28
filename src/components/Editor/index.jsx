@@ -1,9 +1,11 @@
+import 'braft-editor/dist/index.css';
 import React from 'react';
 // 引入编辑器组件
 import BraftEditor from 'braft-editor';
 // 引入编辑器样式
 import 'braft-editor/dist/index.css';
 import './index.less';
+import AliyunOSSUpload from '@/components/AliyunOSSUpload';
 
 export default class EditorDemo extends React.Component {
   state = {
@@ -40,17 +42,40 @@ export default class EditorDemo extends React.Component {
     } else {
       this.props.setDetails('');
     }
-    console.log(editorState.isEmpty());
   };
 
   render() {
+    // 自定义控件--插入图片
+
+    const extendControls = [
+      {
+        key: 'antd-uploader',
+        type: 'component',
+        component: (
+          <AliyunOSSUpload
+            // setCoverKey={setCoverKey}
+            accept="image/*"
+          >
+            {/* 这里的按钮最好加上type="button"，以避免在表单容器中触发表单提交，用Antd的Button组件则无需如此 */}
+            <button
+              type="button"
+              className="control-item button upload-button"
+              data-title="插入图片"
+            >
+              插入图片
+            </button>
+          </AliyunOSSUpload>
+        ),
+      },
+    ];
+
     const { editorState } = this.state;
     return (
       <div className="my-component">
         <BraftEditor
           value={editorState}
           onChange={this.handleEditorChange}
-          // onSave={this.submitContent}
+          extendControls={extendControls}
         />
       </div>
     );

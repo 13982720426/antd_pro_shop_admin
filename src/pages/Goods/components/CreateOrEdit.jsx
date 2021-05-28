@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ProForm, { ProFormText, ProFormTextArea, ProFormDigit } from '@ant-design/pro-form';
-import { Modal, message, Skeleton, Cascader } from 'antd';
+import { Modal, message, Skeleton, Cascader, Button } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 import { showUser, updateUser, addUser } from '@/services/user';
 import { getCategory } from '@/services/category';
 import AliyunOSSUpload from '@/components/AliyunOSSUpload';
@@ -135,7 +136,7 @@ const CreateOrEdit = (props) => {
             >
               <div>
                 <AliyunOSSUpload setCoverKey={setCoverKey} accept="image/*">
-                  点击上传商品主图
+                  <Button icon={<UploadOutlined />}>点击上传商品主图</Button>
                 </AliyunOSSUpload>
               </div>
             </ProForm.Item>
