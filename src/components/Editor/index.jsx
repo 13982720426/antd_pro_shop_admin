@@ -6,6 +6,7 @@ import BraftEditor from 'braft-editor';
 import 'braft-editor/dist/index.css';
 import './index.less';
 import AliyunOSSUpload from '@/components/AliyunOSSUpload';
+import { ContentUtils } from 'braft-utils';
 
 export default class EditorDemo extends React.Component {
   state = {
@@ -22,13 +23,7 @@ export default class EditorDemo extends React.Component {
   //   });
   // }
 
-  // submitContent = async () => {
-  //   // 在编辑器获得焦点时按下ctrl+s会执行此方法
-  //   // 编辑器内容提交到服务端之前，可直接调用editorState.toHTML()来获取HTML格式的内容
-  //   const htmlContent = this.state.editorState.toHTML();
-  //   const result = await saveEditorContent(htmlContent);
-  // };
-
+  // 编辑器内容改变的时候执行
   handleEditorChange = (editorState) => {
     // 更新编辑器的状态
     this.setState({ editorState });
@@ -44,18 +39,26 @@ export default class EditorDemo extends React.Component {
     }
   };
 
+  // 图片上传完成后执行此方法，用来在编译器中显示图片
+  insertImage = (url) => {
+    this.setState({
+      editorState: ContentUtils.insertMedias(this.state.editorState, [
+        {
+          type: 'IMAGE',
+          url,
+        },
+      ]),
+    });
+  };
+
   render() {
     // 自定义控件--插入图片
-
     const extendControls = [
       {
         key: 'antd-uploader',
         type: 'component',
         component: (
-          <AliyunOSSUpload
-            // setCoverKey={setCoverKey}
-            accept="image/*"
-          >
+          <AliyunOSSUpload insertImage={this.insertImage} accept="image/*" showUploadList={false}>
             {/* 这里的按钮最好加上type="button"，以避免在表单容器中触发表单提交，用Antd的Button组件则无需如此 */}
             <button
               type="button"

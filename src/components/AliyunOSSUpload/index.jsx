@@ -1,8 +1,6 @@
 import React from 'react';
-import { Upload, message, Button } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Upload, message } from 'antd';
 import { ossConfig } from '@/services/commom';
-
 export default class AliyunOSSUpload extends React.Component {
   state = {
     OSSData: {},
@@ -29,8 +27,17 @@ export default class AliyunOSSUpload extends React.Component {
   // 文件上传过程中触发的回调函数，直到上传完成
   onChange = ({ file }) => {
     if (file.status === 'done') {
-      // 上传成功之后，把文件的key，设置成表单某个字段的值
-      this.props.setCoverKey(file.key);
+      const { setCoverKey, insertImage } = this.props;
+      if (setCoverKey) {
+        // 上传成功之后，把文件的key，设置成表单某个字段的值
+        setCoverKey(file.key);
+      }
+
+      // 上传完成之后，如果需要url，那么返回url给父组件【
+      if (insertImage) {
+        insertImage(file.url);
+      }
+
       message.success('上传成功');
     }
   };
@@ -68,7 +75,7 @@ export default class AliyunOSSUpload extends React.Component {
   };
 
   render() {
-    const { value, accept } = this.props;
+    const { value, accept, showUploadList } = this.props;
     const props = {
       accept: accept || '',
       name: 'file',
@@ -80,6 +87,7 @@ export default class AliyunOSSUpload extends React.Component {
       beforeUpload: this.beforeUpload,
       listType: 'picture',
       maxCount: 1,
+      showUploadList,
     };
 
     return (

@@ -135,7 +135,7 @@ const CreateOrEdit = (props) => {
               rules={[{ required: true, message: '请选择商品主图' }]}
             >
               <div>
-                <AliyunOSSUpload setCoverKey={setCoverKey} accept="image/*">
+                <AliyunOSSUpload setCoverKey={setCoverKey} accept="image/*" showUploadList={true}>
                   <Button icon={<UploadOutlined />}>点击上传商品主图</Button>
                 </AliyunOSSUpload>
               </div>
