@@ -82,7 +82,6 @@ export default class AliyunOSSUpload extends React.Component {
       fileList: value,
       action: this.state.OSSData.host,
       onChange: this.onChange,
-      // onRemove: this.onRemove,
       data: this.getExtraData,
       beforeUpload: this.beforeUpload,
       listType: 'picture',

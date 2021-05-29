@@ -26,3 +26,19 @@ export async function isRecommend(goodsId) {
 export async function addGoods(params) {
   return request.post('/admin/goods', { params });
 }
+/**
+ * 商品详情
+ * @param {*} editId
+ * @returns
+ */
+export async function showGoods(editId) {
+  return request(`/admin/goods/${editId}?include=category`);
+}
+/**
+ * 更新商品
+ * @param {*} params
+ * @returns
+ */
+export async function updateGoods(editId, params) {
+  return request.put(`/admin/goods/${editId}`, { params });
+}

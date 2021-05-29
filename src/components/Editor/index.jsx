@@ -11,17 +11,8 @@ import { ContentUtils } from 'braft-utils';
 export default class EditorDemo extends React.Component {
   state = {
     // 创建一个空的editorState作为初始值
-    editorState: BraftEditor.createEditorState(null),
+    editorState: BraftEditor.createEditorState(this.props.content ?? null),
   };
-
-  // async componentDidMount() {
-  //   // 假设此处从服务端获取html格式的编辑器内容
-  //   const htmlContent = await fetchEditorContent();
-  //   // 使用BraftEditor.createEditorState将html字符串转换为编辑器需要的editorStat
-  //   this.setState({
-  //     editorState: BraftEditor.createEditorState(htmlContent),
-  //   });
-  // }
 
   // 编辑器内容改变的时候执行
   handleEditorChange = (editorState) => {

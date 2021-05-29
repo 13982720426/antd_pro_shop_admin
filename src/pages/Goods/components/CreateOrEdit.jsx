@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import ProForm, { ProFormText, ProFormTextArea, ProFormDigit } from '@ant-design/pro-form';
-import { Modal, message, Skeleton, Cascader, Button } from 'antd';
+import { Modal, message, Skeleton, Cascader, Button, Image } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { showUser, updateUser } from '@/services/user';
-import { addGoods } from '@/services/goods';
+import { addGoods, showGoods, updateGoods } from '@/services/goods';
 import { getCategory } from '@/services/category';
 import AliyunOSSUpload from '@/components/AliyunOSSUpload';
 import Editor from '@/components/Editor';
@@ -18,7 +17,7 @@ const CreateOrEdit = (props) => {
   const { isModalVisible, isShowModal, actionRef, editId } = props;
 
   // 将表单初始化的值设置成状态，在编辑的时候使用这个状态
-  const [initialValues, setinitialValues] = useState(undefined);
+  const [initialValues, setInitialValues] = useState(undefined);
   const [options, setOptions] = useState([]);
 
   // 定义Form实例，用来操作表单
@@ -38,20 +37,18 @@ const CreateOrEdit = (props) => {
     const resCategory = await getCategory();
     if (resCategory.status === undefined) setOptions(resCategory);
 
-    // 发送请求，获取用户详情
+    // 发送请求，获取商品详情
     if (editId !== undefined) {
-      const response = await showUser(editId);
+      const response = await showGoods(editId);
       // 获取数据之后,修改状态；状态改变，组件重新渲染，骨架框消失，编辑表单出现
-      setinitialValues({
-        name: response.name,
-        email: response.email,
-      });
+      const { pid, id } = response.category;
+      const defaultCategory = pid === 0 ? [id] : [pid, id];
+      setInitialValues({ ...response, category_id: defaultCategory });
     }
   }, []);
 
   // 提交表单，执行编辑或者添加
   const handleSubmit = async (values) => {
-    console.log(values);
     let response = [];
     if (editId === undefined) {
       // 执行添加
@@ -60,7 +57,7 @@ const CreateOrEdit = (props) => {
     } else {
       // 执行编辑
       // 发送请求，更新商品
-      // response = await updateUser(editId, values);
+      response = await updateGoods(editId, { ...values, category_id: values.category_id[1] });
     }
     if (response.status === undefined) {
       message.success(`${type}成功！`);
@@ -131,6 +128,7 @@ const CreateOrEdit = (props) => {
               rules={[{ required: true, message: '请输入商品库存' }]}
             />
 
+            <ProFormText name="cover" hidden={true} />
             <ProForm.Item
               name="cover"
               label="上传商品主图"
@@ -140,6 +138,11 @@ const CreateOrEdit = (props) => {
                 <AliyunOSSUpload setCoverKey={setCoverKey} accept="image/*" showUploadList={true}>
                   <Button icon={<UploadOutlined />}>点击上传商品主图</Button>
                 </AliyunOSSUpload>
+                {!initialValues.cover_url ? (
+                  ''
+                ) : (
+                  <Image width={200} src={initialValues.cover_url} />
+                )}
               </div>
             </ProForm.Item>
 
@@ -148,7 +151,7 @@ const CreateOrEdit = (props) => {
               label="商品详情"
               rules={[{ required: true, message: '请输入商品详情' }]}
             >
-              <Editor setDetails={setDetails} />
+              <Editor setDetails={setDetails} content={initialValues.details} />
             </ProForm.Item>
           </ProForm>
         )
