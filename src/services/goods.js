@@ -21,3 +21,8 @@ export async function isOn(goodsId) {
 export async function isRecommend(goodsId) {
   return request.patch(`/admin/goods/${goodsId}/recommend`);
 }
+
+// 添加商品
+export async function addGoods(params) {
+  return request.post('/admin/goods', { params });
+}

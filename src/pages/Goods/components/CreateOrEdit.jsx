@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import ProForm, { ProFormText, ProFormTextArea, ProFormDigit } from '@ant-design/pro-form';
 import { Modal, message, Skeleton, Cascader, Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { showUser, updateUser, addUser } from '@/services/user';
+import { showUser, updateUser } from '@/services/user';
+import { addGoods } from '@/services/goods';
 import { getCategory } from '@/services/category';
 import AliyunOSSUpload from '@/components/AliyunOSSUpload';
 import Editor from '@/components/Editor';
@@ -50,15 +51,16 @@ const CreateOrEdit = (props) => {
 
   // 提交表单，执行编辑或者添加
   const handleSubmit = async (values) => {
+    console.log(values);
     let response = [];
     if (editId === undefined) {
       // 执行添加
-      // 发送请求，添加用户
-      response = await addUser(values);
+      // 发送请求，添加商品
+      response = await addGoods({ ...values, category_id: values.category_id[1] });
     } else {
       // 执行编辑
-      // 发送请求，更新用户
-      response = await updateUser(editId, values);
+      // 发送请求，更新商品
+      // response = await updateUser(editId, values);
     }
     if (response.status === undefined) {
       message.success(`${type}成功！`);
