@@ -138,10 +138,13 @@ const CreateOrEdit = (props) => {
                 <AliyunOSSUpload setCoverKey={setCoverKey} accept="image/*" showUploadList={true}>
                   <Button icon={<UploadOutlined />}>点击上传商品主图</Button>
                 </AliyunOSSUpload>
-                {!initialValues.cover_url ? (
+                {initialValues === undefined || !initialValues.cover_url ? (
                   ''
                 ) : (
-                  <Image width={200} src={initialValues.cover_url} />
+                  <Image
+                    width={200}
+                    src={initialValues === undefined ? '' : initialValues.cover_url}
+                  />
                 )}
               </div>
             </ProForm.Item>
@@ -151,7 +154,10 @@ const CreateOrEdit = (props) => {
               label="商品详情"
               rules={[{ required: true, message: '请输入商品详情' }]}
             >
-              <Editor setDetails={setDetails} content={initialValues.details} />
+              <Editor
+                setDetails={setDetails}
+                content={initialValues === undefined ? '' : initialValues.details}
+              />
             </ProForm.Item>
           </ProForm>
         )
