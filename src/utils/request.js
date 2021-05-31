@@ -1,6 +1,7 @@
 /** Request 网络请求工具 更详细的 api 文档: https://github.com/umijs/umi-request */
 import { extend } from 'umi-request';
 import { message } from 'antd';
+import { history } from 'umi';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -42,6 +43,17 @@ const errorHandler = async (error) => {
     // 处理400的情况
     if (status === 400) {
       errorText += `[ ${result.message} ]`;
+    }
+    // 处理401的情况
+    if (status === 401) {
+      // 清空用户本地缓存的token和用户信息
+      // 删除本地存储的token和userInfo
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('userInfo');
+
+      // 跳转到登录页
+      // 重定向到登录页
+      history.replace('/login');
     }
     message.error(errorText);
   } else if (!response) {

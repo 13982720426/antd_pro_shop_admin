@@ -9,6 +9,7 @@
 export default {
   dev: {
     '/api/': {
+      // target: "https://api.shop.eduwork.cn/" //后端接口地址
       target: 'https://api.shop.eduwork.cn/',
       changeOrigin: true,
       pathRewrite: {
