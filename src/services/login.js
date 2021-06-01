@@ -1,9 +1,9 @@
 import request from '@/utils/request';
 
-export async function fakeAccountLogin(params) {
+export async function fakeAccountLogin(data) {
   return request('/auth/login', {
     method: 'POST',
-    data: params,
+    data,
   });
 }
 export async function logout() {

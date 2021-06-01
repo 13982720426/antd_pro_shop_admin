@@ -23,8 +23,8 @@ export async function isRecommend(goodsId) {
 }
 
 // 添加商品
-export async function addGoods(params) {
-  return request.post('/admin/goods', { params });
+export async function addGoods(data) {
+  return request.post('/admin/goods', { data });
 }
 /**
  * 商品详情
@@ -39,6 +39,6 @@ export async function showGoods(editId) {
  * @param {*} params
  * @returns
  */
-export async function updateGoods(editId, params) {
-  return request.put(`/admin/goods/${editId}`, { params });
+export async function updateGoods(editId, data) {
+  return request.put(`/admin/goods/${editId}`, { data });
 }

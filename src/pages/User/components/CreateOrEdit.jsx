@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ProForm, { ProFormText } from '@ant-design/pro-form';
-import { Modal, message, Skeleton } from 'antd';
+import { Modal, message, Skeleton, Button } from 'antd';
 import { showUser, updateUser, addUser } from '@/services/user';
 
 const CreateOrEdit = (props) => {
@@ -58,6 +58,7 @@ const CreateOrEdit = (props) => {
       onCancel={() => isShowModal(false)}
       footer={null}
       destroyOnClose={true}
+      forceRender
     >
       {
         // 只有是编辑的情况下，并且要显示的数据还有返回，才显示骨架框
@@ -86,7 +87,7 @@ const CreateOrEdit = (props) => {
               ]}
             />
             {
-              // 只有添加用户才有密码框
+              // 只有添加initialValues才有密码框
               editId !== undefined ? (
                 ''
               ) : (

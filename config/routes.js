@@ -44,6 +44,7 @@ export default [
                 icon: 'ShoppingOutlined',
                 component: '@/pages/Goods',
               },
+
               {
                 component: './404',
               },
